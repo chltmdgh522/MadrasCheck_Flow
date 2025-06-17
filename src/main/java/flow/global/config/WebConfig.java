@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .order(1)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/", "/css/**", "/*.ico", "/error",
-                        "/logout","/script.js");
+                        "/script.js","/api/oauth2/login","/api/oauth2/callback","/api/oauth2/logout");
 
     }
 }
