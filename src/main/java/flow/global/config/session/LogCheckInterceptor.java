@@ -1,4 +1,4 @@
-package flow.global.infra;
+package flow.global.config.session;
 
 import flow.global.config.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ public class LogCheckInterceptor implements HandlerInterceptor {
         if (session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {
             log.info("미인증 사용자 요청");
 
-            response.sendRedirect("/login?redirectURL=" + requestURI);
+            response.sendRedirect("/?redirectURL=" + requestURI);
             return false;
         }
         return true;
