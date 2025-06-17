@@ -4,9 +4,11 @@ import flow.domain.homework.application.service.HomeworkService;
 import flow.domain.homework.domain.entity.ExtensionType;
 import flow.domain.homework.domain.entity.Homework;
 import flow.domain.homework.domain.repository.HomeworkRepository;
-import flow.domain.homework.presentation.dto.res.CustomReq;
-import flow.domain.homework.presentation.dto.res.FixedReq;
+import flow.domain.homework.presentation.dto.req.CustomReq;
+import flow.domain.homework.presentation.dto.req.FixedReq;
+import flow.domain.homework.presentation.dto.res.CustomRes;
 import flow.domain.user.domain.entity.User;
+import flow.domain.user.presentation.dto.res.SucessLoginRes;
 import flow.global.exception.FlowException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,15 +39,24 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
-    public void createCustom(CustomReq customReq, User user) {
-        Homework homework = Homework.builder()
-                .user(user)
-                .extension(customReq.extension())
-                .type(ExtensionType.CUSTOM)
-                .selected(false)
-                .build();
+    public CustomRes createCustom(CustomReq customReq, User user) {
+        boolean flag = homeworkRepository.existsByUserAndExtension(user, customReq.extension());
+        CustomRes custom;
+        if (!flag) {
+            Homework homework = Homework.builder()
+                    .user(user)
+                    .extension(customReq.extension())
+                    .type(ExtensionType.CUSTOM)
+                    .selected(false)
+                    .build();
 
-        homeworkRepository.save(homework);
+            homeworkRepository.save(homework);
+
+            custom = CustomRes.of("성공");
+        } else {
+            custom = CustomRes.of("실패");
+        }
+        return custom;
     }
 
     @Override
@@ -67,7 +78,8 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     public List<Homework> customList(User user) {
-        return homeworkRepository.findFixedExtensionsByUser(user);
+
+        return homeworkRepository.findCustomExtensionsByUser(user);
     }
 
 }

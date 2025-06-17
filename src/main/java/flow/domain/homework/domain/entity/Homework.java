@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 public class Homework {
     @Id
-    @Column(unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,7 +31,8 @@ public class Homework {
 
     private boolean selected; // CUSTOM은 무조건 False임
 
-
+    @CreationTimestamp
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @Builder

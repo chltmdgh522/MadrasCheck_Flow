@@ -1,6 +1,6 @@
 package flow.global.config;
 
-import flow.global.infra.LogCheckInterceptor;
+import flow.global.config.session.LogCheckInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

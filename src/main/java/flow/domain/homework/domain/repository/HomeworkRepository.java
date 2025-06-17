@@ -18,4 +18,7 @@ public interface HomeworkRepository extends JpaRepository<Homework, Long> {
 
     @Query("SELECT h FROM Homework h WHERE h.user = :user AND h.type = 'CUSTOM' ORDER BY h.createdAt ASC")
     List<Homework> findCustomExtensionsByUser(@Param("user") User user);
+
+    // 중복 조회 검증 있으면 true 없으면 false
+    boolean existsByUserAndExtension(User user, String extension);
 }
