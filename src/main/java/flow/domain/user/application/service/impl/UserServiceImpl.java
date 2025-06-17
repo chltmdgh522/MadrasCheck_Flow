@@ -88,6 +88,7 @@ public class UserServiceImpl implements UserService {
                             userResponse.email(),
                             userResponse.profileImage()
                     );
+                    log.info("기존");
                     return userRepository.save(existingUser);
                 })
                 .orElseGet(() -> userRepository.save(

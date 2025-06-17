@@ -55,7 +55,9 @@ public class UserController {
 
 
     @PostMapping("/logout")
-    public void logout(HttpSession httpSession) {
+    public String logout(HttpSession httpSession) {
+
         userService.logout(httpSession);
+        return "redirect:/";
     }
 }
