@@ -1,8 +1,7 @@
 package flow.global.exception;
 
 
-import babbuddy.domain.user.infra.exception.UserNotFoundException;
-import babbuddy.global.infra.exception.auth.BabbuddyAuthException;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
