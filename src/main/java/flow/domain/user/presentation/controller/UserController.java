@@ -2,6 +2,8 @@ package flow.domain.user.presentation.controller;
 
 import flow.domain.user.application.service.UserService;
 import flow.domain.user.domain.entity.User;
+import flow.domain.user.presentation.dto.req.UserLoginDto;
+import flow.domain.user.presentation.dto.res.SucessLoginRes;
 import flow.global.config.session.SessionConst;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,42 +14,43 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-@RestController
+@Controller
 @RequestMapping("/api/oauth2")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/")
-    public String home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) User loginMember) {
-        if (loginMember != null) {
-            return "home/no";
-        } else {
-            return "home/yes";
-        }
-    }
 
     @GetMapping("/login")
     public ResponseEntity<String> loginPage() {
         return ResponseEntity.status(200).body(userService.getLoginLink());
     }
 
+
     @GetMapping("/callback")
-    public String login(@RequestParam("code") String code, HttpServletResponse response,
-                        HttpServletRequest request, BindingResult bindingResult) throws IOException {
-        User user = userService.login(code, response);
-        if (user == null) bindingResult.reject("로그인 실패했습니다");
-        else {
-            HttpSession session = request.getSession();
-            session.setAttribute(SessionConst.LOGIN_MEMBER, user);
+    public String loginPageCallback(@RequestParam("code") String code,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    Model model) throws IOException {
+
+        User user = userService.login(code, response, request);
+        if (user == null) {
+            model.addAttribute("message", "로그인에 실패했습니다. 다시 시도해주세요.");
+            model.addAttribute("success", false);
+        } else {
+            model.addAttribute("message", "로그인 성공! 환영합니다.");
+            model.addAttribute("success", true);
         }
-        return "redirect:/";
+
+        return "oauth/callback";
     }
 
 

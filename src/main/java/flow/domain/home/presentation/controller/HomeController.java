@@ -15,9 +15,9 @@ public class HomeController {
     @GetMapping("/")
     public String home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) User loginMember){
         if (loginMember != null) {
-            return "home/no";
-        }else{
             return "home/yes";
+        }else{
+            return "home/no";
         }
     }
 }

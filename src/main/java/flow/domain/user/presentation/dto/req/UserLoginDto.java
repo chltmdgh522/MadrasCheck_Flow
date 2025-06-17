@@ -1,8 +1,16 @@
 package flow.domain.user.presentation.dto.req;
 
-public record UserLoginDto(
+import jakarta.validation.constraints.NotBlank;
 
-        String username,
-        String password
-) {
+public class UserLoginDto{
+    @NotBlank(message = "code는 필수입니다")
+    private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 }
