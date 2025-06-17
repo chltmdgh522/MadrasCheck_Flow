@@ -1,6 +1,7 @@
 package flow.domain.user.domain.repository;
 
-import babbuddy.domain.user.domain.entity.User;
+
+import flow.domain.user.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
