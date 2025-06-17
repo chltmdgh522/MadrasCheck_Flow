@@ -1,6 +1,9 @@
 package flow.domain.user.application.service.impl;
 
 
+import flow.domain.homework.domain.entity.ExtensionType;
+import flow.domain.homework.domain.entity.Homework;
+import flow.domain.homework.domain.repository.HomeworkRepository;
 import flow.domain.user.application.service.UserService;
 import flow.domain.user.domain.entity.User;
 import flow.domain.user.domain.repository.UserRepository;
@@ -13,6 +16,7 @@ import flow.global.infra.feignclient.KakaoUserFeignClient;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,17 +25,21 @@ import org.springframework.stereotype.Service;
 
 
 import java.io.IOException;
+import java.util.List;
 
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final KakaoTokenFeignClient kakaoTokenFeignClient;
     private final KakaoUserFeignClient kakaoUserFeignClient;
     private final UserRepository userRepository;
+    private final HomeworkRepository homeworkRepository;
     @Value("${oauth2.base-url}")
+
     private String baseUrl;
 
     @Value("${oauth2.client-id}")
@@ -91,14 +99,29 @@ public class UserServiceImpl implements UserService {
                     log.info("기존");
                     return userRepository.save(existingUser);
                 })
-                .orElseGet(() -> userRepository.save(
-                        User.builder()
-                                .id(userResponse.kakaoId())
-                                .email(userResponse.email())
-                                .name(userResponse.nickname())
-                                .profile(userResponse.profileImage())
-                                .build()
-                ));
+                .orElseGet(() -> {
+                    User newUser = userRepository.save(User.builder()
+                            .id(userResponse.kakaoId())
+                            .email(userResponse.email())
+                            .name(userResponse.nickname())
+                            .profile(userResponse.profileImage())
+                            .build()
+                    );
+
+                    List<String> fixedExts = List.of("bat", "cmd", "com", "cpl","exe","scr","js"); // 원하는 확장자
+                    List<Homework> homeworkList = fixedExts.stream()
+                            .map(ext -> Homework.builder()
+                                    .user(newUser)
+                                    .extension(ext)
+                                    .type(ExtensionType.FIXED)
+                                    .selected(false)
+                                    .build()
+                            ).toList();
+
+                    homeworkRepository.saveAll(homeworkList);
+
+                    return newUser;
+                });
     }
 
     public void logout(HttpSession session) {
