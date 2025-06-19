@@ -26,7 +26,14 @@ $(document).ready(function () {
 
 
     $('#addExtensionBtn').click(function () {
-        const customExt = $('#customExtension').val().trim();
+        let customExt = $('#customExtension').val().trim(); // 앞뒤 공백 제거
+
+        customExt = customExt.replace(/\s+/g, ''); // 중간에 공백 제거
+
+        if (!/^[a-z0-9]+$/.test(customExt)) { // 정규식
+            alert('확장자는 영문자와 숫자만 입력할 수 있습니다.');
+            return;
+        }
 
         if (!customExt) {
             alert('확장자를 입력하세요.');
