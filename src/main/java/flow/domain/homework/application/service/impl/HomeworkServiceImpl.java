@@ -8,7 +8,6 @@ import flow.domain.homework.presentation.dto.req.CustomReq;
 import flow.domain.homework.presentation.dto.req.FixedReq;
 import flow.domain.homework.presentation.dto.res.CustomRes;
 import flow.domain.user.domain.entity.User;
-import flow.domain.user.presentation.dto.res.SucessLoginRes;
 import flow.global.exception.FlowException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

@@ -9,7 +9,6 @@ import flow.domain.user.domain.entity.User;
 import flow.domain.user.domain.repository.UserRepository;
 import flow.domain.user.presentation.dto.res.KakaoTokenResponse;
 import flow.domain.user.presentation.dto.res.OAuth2UserResponse;
-import flow.domain.user.presentation.dto.res.SucessLoginRes;
 import flow.global.config.session.SessionConst;
 import flow.global.infra.feignclient.KakaoTokenFeignClient;
 import flow.global.infra.feignclient.KakaoUserFeignClient;
@@ -20,7 +19,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
