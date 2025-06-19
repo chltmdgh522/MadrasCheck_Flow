@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow - 로그인</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/home/nohome.css}">
+</head>
+<body>
+<div class="login-container">
+    <div class="logo">FLOW</div>
+    <div class="subtitle">간편하게 로그인하고 시작하세요</div>
+
+    <button class="kakao-login-btn" id="kakaoLoginBtn">
+        <div class="kakao-icon"></div>
+        카카오로 시작하기
+    </button>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        로그인 중입니다...
+    </div>
+
+    <div class="footer">
+        카카오 계정으로 빠르고 안전하게 로그인하세요
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#kakaoLoginBtn').click(function() {
+
+            $('#loading').show();
+            $(this).prop('disabled', true);
+
+            // 백엔드에서 카카오 로그인 링크 가져오기
+            $.ajax({
+                url: '/api/oauth2/login',
+                type: 'GET',
+                success: function(response) {
+                    // 카카오 로그인 페이지로 리다이렉트
+                    window.location.href = response
+                },
+                error: function(xhr, status, error) {
+                    console.error('로그인 링크 요청 실패:', error);
+                    alert('로그인 중 오류가 발생했습니다. 다시 시도해주세요.');
+                    $('#loading').hide();
+                    $('#kakaoLoginBtn').prop('disabled', false);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow - 대시보드</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/home/yeshome.css}">
+
+</head>
+<body>
+<div class="header">
+    <div class="logo">FLOW</div>
+    <div class="user-info">
+        <span id="name" th:text="${user.name}">사용자님</span>
+        <form id="logoutForm" action="/api/oauth2/logout" method="post">
+            <button type="submit" class="logout-btn">로그아웃</button>
+        </form>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="welcome-section">
+        <h1 class="welcome-title">환영합니다! 🎉</h1>
+        <p class="welcome-subtitle">로그인이 성공적으로 완료되었습니다.</p>
+    </div>
+
+    <div class="tasks-grid">
+        <!-- 파일 확장자 과제 -->
+        <div class="task-card">
+            <div class="task-icon">📁</div>
+            <div class="status-badge status-new">과제</div>
+            <h3 class="task-title">파일 확장자 차단 과제</h3>
+            <p class="task-description">
+                과제 열심히 했습니다.
+            </p>
+
+            <button class="task-btn" onclick="location.href='/homework'">
+                과제 확인
+            </button>
+        </div>
+
+        <!-- API 개발 과제 -->
+        <div class="task-card">
+            <div class="task-icon">⚡</div>
+            <div class="status-badge status-progress">API 명세서</div>
+            <h3 class="task-title">API 개발</h3>
+            <p class="task-description">
+                Spring Boot 기반의 API 명세서
+            </p>
+            <button class="task-btn" onclick="window.open('/swagger-ui/index.html', '_blank')">
+                API 문서 보기
+            </button>
+        </div>
+
+
+    </div>
+</div>
+
+
+</body>
+</html>

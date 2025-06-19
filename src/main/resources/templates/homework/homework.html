@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파일 확장자 분석기</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" th:href="@{/css/homework/homework.css}">
+</head>
+<body>
+<div class="header">
+    <div class="logo">FLOW - 파일 확장자 분석기</div>
+    <a href="/" class="back-btn">← 돌아가기</a>
+</div>
+<div class="main-container">
+    <div class="analyzer-section">
+        <h2 class="section-title">파일 확장자에 따라 특정 형식의 파일을 찾습니다</h2>
+
+
+        <div class="form-group">
+            <label class="form-label">파일 확장자</label>
+            <div class="checkbox-group">
+                <div class="checkbox-item" th:each="fixed : ${fixedList}">
+                    <input type="checkbox"
+                           th:id="${fixed.id}"
+                           th:value="${fixed.extension}"
+                           th:data-id="${fixed.id}"
+                           th:checked="${fixed.selected}"
+                           class="fixed-checkbox"/>
+                    <label th:for="${fixed.extension}" th:text="${fixed.extension}"></label>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="form-label">커스텀 확장자</label>
+            <div class="input-group">
+                <input type="text" class="extension-input" id="customExtension"
+                       placeholder="확장자를 입력하세요 (예: pdf, txt)" maxlength="20">
+                <button class="add-btn" id="addExtensionBtn">추가</button>
+            </div>
+        </div>
+
+
+        <div class="extensions-display" id="extensionsDisplay">
+            <div th:if="${#lists.isEmpty(customList)}" class="empty-message">선택된 확장자가 없습니다.</div>
+            <span class="extension-tag" th:each="custom : ${customList}" th:attr="data-id=${custom.id}">
+        <span th:text="${custom.extension}"></span>
+        <button class="remove-btn" th:onclick="'removeExtension(' + ${custom.id} + ')'">×</button>
+      </span>
+        </div>
+
+        <div class="counter"
+             id="extensionCounter"
+             th:attr="data-count=${customList.size()}"
+             th:text="${customList.size()} + ' / 10'">
+        </div>
+
+    </div>
+</div>
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>
