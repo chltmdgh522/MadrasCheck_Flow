@@ -13,6 +13,7 @@
 <div class="header">
     <div class="logo">FLOW</div>
     <div class="user-info">
+        <img th:src="${user.profile}" alt="프로필" class="profile-img" />
         <span id="name" th:text="${user.name}">사용자님</span>
         <form id="logoutForm" action="/api/oauth2/logout" method="post">
             <button type="submit" class="logout-btn">로그아웃</button>

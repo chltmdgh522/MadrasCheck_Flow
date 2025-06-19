@@ -35,6 +35,13 @@ body {
     gap: 1rem;
 }
 
+.profile-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+}
 .logout-btn {
     background: #ff6b6b;
     color: white;
