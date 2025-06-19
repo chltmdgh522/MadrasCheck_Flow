@@ -26,14 +26,13 @@ $(document).ready(function () {
 
 
     $('#addExtensionBtn').click(function () {
-        const customExt = $('#customExtension').val().trim().toLowerCase();
+        const customExt = $('#customExtension').val().trim();
 
         if (!customExt) {
             alert('확장자를 입력하세요.');
             return;
         }
 
-        console.log(selectedCount);
         if (selectedCount >= maxExtensions) {
             alert('최대 10개까지만 추가할 수 있습니다.');
             return;

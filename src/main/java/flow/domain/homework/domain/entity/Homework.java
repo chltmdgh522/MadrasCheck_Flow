@@ -24,7 +24,9 @@ public class Homework {
     private User user;
 
 
-    private String extension;
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin")
+    private String extension; // 대소문자 구분을 위해
+
 
     @Enumerated(EnumType.STRING)
     private ExtensionType type; // FIXED or CUSTOM
