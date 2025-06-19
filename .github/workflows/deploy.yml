@@ -3,7 +3,7 @@ name: flow CI/CD
 on:
   push:
     branches:
-      - feat#4
+      - main
 
 jobs:
   build-and-deploy:
