@@ -22,21 +22,20 @@ public class HomeworkApiController {
 
 
     @PatchMapping
-    public void updateFixedHomework(@ModelAttribute FixedReq fixedReq){
-        log.info(String.valueOf(fixedReq.id()));
-
+    public void updateFixedHomework(@ModelAttribute FixedReq fixedReq) {
         homeworkService.FixedReq(fixedReq);
     }
+
     @PostMapping
     public ResponseEntity<CustomRes> createCustomHomework(@ModelAttribute CustomReq customReq,
                                                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false)
-                                         User loginMember){
-        return  ResponseEntity.ok(homeworkService.createCustom(customReq,loginMember));
+                                                          User loginMember) {
+        return ResponseEntity.ok(homeworkService.createCustom(customReq, loginMember));
     }
 
     @DeleteMapping
-    public void deleteCustomHomework(@ModelAttribute CustomDeleteReq customDeleteReq){
-            homeworkService.deleteCustom(customDeleteReq.id());
+    public void deleteCustomHomework(@ModelAttribute CustomDeleteReq customDeleteReq) {
+        homeworkService.deleteCustom(customDeleteReq.id());
     }
 
 }

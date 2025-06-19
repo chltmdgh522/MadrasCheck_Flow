@@ -74,11 +74,9 @@ public class UserServiceImpl implements UserService {
 
             // 2단계: 사용자 정보 요청
             OAuth2UserResponse userResponse = kakaoUserFeignClient.getUserInfo(bearerToken);
-            log.info("카카오 ID {}", userResponse.id());
 
             User user = findOrCreateUser(userResponse);
 
-            log.info("로그인 성공 {}", user.getName());
             request.getSession().setAttribute(SessionConst.LOGIN_MEMBER, user);
             return user;
 
@@ -96,7 +94,6 @@ public class UserServiceImpl implements UserService {
                             userResponse.email(),
                             userResponse.profileImage()
                     );
-                    log.info("기존");
                     return userRepository.save(existingUser);
                 })
                 .orElseGet(() -> {
@@ -108,7 +105,7 @@ public class UserServiceImpl implements UserService {
                             .build()
                     );
 
-                    List<String> fixedExts = List.of("bat", "cmd", "com", "cpl","exe","scr","js"); // 원하는 확장자
+                    List<String> fixedExts = List.of("bat", "cmd", "com", "cpl", "exe", "scr", "js"); // 고정 확장자
                     List<Homework> homeworkList = fixedExts.stream()
                             .map(ext -> Homework.builder()
                                     .user(newUser)
