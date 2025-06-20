@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/homework")
 @RequiredArgsConstructor
@@ -55,6 +57,15 @@ public class HomeworkApiController {
     public void deleteCustomHomework(
             @Parameter(description = "삭제할 커스텀 확장자 ID") @ModelAttribute CustomDeleteReq customDeleteReq) {
         homeworkService.deleteCustom(customDeleteReq.id());
+    }
+
+    @GetMapping("/list")
+    @Operation(summary = "확장자 목록 조회", description = "사용자의 고정 + 커스텀 확장자 목록을 조회합니다.")
+    public ResponseEntity<List<String>> getRegisteredExtensions(
+            @Parameter(hidden = true)
+            @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) User loginMember) {
+
+        return ResponseEntity.ok(homeworkService.getAllExtensionsForUser(loginMember));
     }
 
 }

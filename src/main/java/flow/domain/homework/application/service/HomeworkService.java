@@ -19,4 +19,6 @@ public interface HomeworkService {
     List<Homework> fixedList(User user);
 
     List<Homework> customList(User user);
+
+    List<String> getAllExtensionsForUser(User user);
 }
