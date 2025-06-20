@@ -218,3 +218,41 @@ body {
     border-radius: 10px;
     border-left: 4px solid #667eea;
 }
+
+.file-upload-group {
+    margin-top: 30px;
+}
+
+.styled-file-input {
+    display: inline-block;
+    padding: 10px 14px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.styled-file-input:hover {
+    border-color: #6666ff;
+    background-color: #f5f7ff;
+}
+
+.check-result-box {
+    margin-top: 16px;
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+.check-result-box .valid-ext {
+    color: #2e7d32; /* green */
+}
+
+.check-result-box .invalid-ext {
+    color: #d32f2f; /* red */
+}

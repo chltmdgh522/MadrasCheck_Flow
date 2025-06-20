@@ -17,7 +17,9 @@ $(document).ready(function () {
                 id: id,
                 selected: selected
             },
-            success: function () {},
+            success: function () {
+                location.reload();
+            },
             error: function () {
                 alert('⚠ FIXED 업데이트 실패');
             }
@@ -30,7 +32,7 @@ $(document).ready(function () {
 
         customExt = customExt.replace(/\s+/g, ''); // 중간에 공백 제거 정규식
 
-        if (!/^[a-z0-9]+$/.test(customExt)) { // 특수문자 제거 정규식
+        if (!/^[a-zA-Z0-9]+$/.test(customExt)) {
             alert('확장자는 영문자와 숫자만 입력할 수 있습니다.');
             return;
         }
@@ -84,3 +86,44 @@ function removeExtension(id) {
         }
     });
 }
+
+
+function getRegisteredExtensions() {
+    const fixed = $(".fixed-checkbox:checked").map(function () {
+        return $(this).val();
+    }).get();
+
+    const custom = $("#extensionsDisplay .extension-tag").map(function () {
+        return $(this).children('span').first().text().trim();
+    }).get();
+
+    return fixed.concat(custom);
+}
+
+function autoCheckExtension(file) {
+    const resultBox = $('#checkResult');
+    resultBox.empty();
+
+    if (!file) {
+        resultBox.text("⚠ 파일을 선택해주세요.");
+        return;
+    }
+
+    const fileName = file.name;
+    const ext = fileName.split('.').pop();
+    const registered = getRegisteredExtensions();
+
+    const isMatched = registered.includes(ext);
+
+    resultBox.html(`
+        <div><strong>확장자: <code>.${ext}</code></strong></div>
+        ${isMatched
+        ? '<div class="invalid-ext">✘ 등록된 확장자입니다. 파일 전송은 어렵습니다.</div>'
+        : '<div class="valid-ext">✔ 등록되지 않은 확장자입니다. 파일 전송 가능합니다.</div>'}
+    `);
+}
+
+$('#fileInput').on('change', function () {
+    const file = this.files[0];
+    autoCheckExtension(file);
+});

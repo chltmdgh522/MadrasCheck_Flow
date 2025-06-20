@@ -19,7 +19,7 @@
 
 
         <div class="form-group">
-            <label class="form-label">파일 확장자</label>
+            <label class="form-label">고정 확장자</label>
             <div class="checkbox-group">
                 <div class="checkbox-item" th:each="fixed : ${fixedList}">
                     <input type="checkbox"
@@ -57,9 +57,15 @@
              th:attr="data-count=${customList.size()}"
              th:text="${customList.size()} + ' / 10'">
         </div>
-
+        <div class="form-group file-upload-group">
+            <label class="form-label">📁 파일 업로드</label>
+            <input type="file" id="fileInput" class="styled-file-input">
+            <div id="checkResult" class="check-result-box"></div>
+        </div>
     </div>
+
 </div>
+
 
 <script src="/js/main.js"></script>
 
