@@ -45,6 +45,11 @@ public class HomeworkServiceImpl implements HomeworkService {
             return CustomRes.of("확장자가 비어있습니다.",false);
         }
 
+        // 0. 20자 제한
+
+        if (rawExtension.length() > 20) {
+            return CustomRes.of("20자내로 작성해주세요.",false);
+        }
         // 1. 빈 문자열 검사
         if (rawExtension.isEmpty()) {
             return CustomRes.of("확장자가 비어있습니다.",false);
