@@ -28,34 +28,19 @@ $(document).ready(function () {
 
 
     $('#addExtensionBtn').click(function () {
-        let customExt = $('#customExtension').val().trim(); // 앞뒤 공백 제거
+        let customExt = $('#customExtension').val();
 
-        customExt = customExt.replace(/\s+/g, ''); // 중간에 공백 제거 정규식
-
-        if (!/^[a-zA-Z0-9]+$/.test(customExt)) {
-            alert('확장자는 영문자와 숫자만 입력할 수 있습니다.');
-            return;
-        }
-
-        if (!customExt) {
-            alert('확장자를 입력하세요.');
-            return;
-        }
-
-        if (selectedCount >= maxExtensions) {
-            alert('최대 10개까지만 추가할 수 있습니다.');
-            return;
-        }
 
         $.ajax({
             url: '/api/homework',
             type: 'POST',
-            data: { extension: customExt },
+            data: {extension: customExt},
             success: function (res) {
-                if (res.message === '실패') {
-                    alert('이미 등록된 확장자입니다.');
+                if (!res.flag) {
+                    alert(res.message);
                     return;
                 }
+
                 location.reload(); // 정상 등록이면 다시 그리기
             },
             error: function () {
@@ -73,11 +58,12 @@ $(document).ready(function () {
 
 
 });
+
 function removeExtension(id) {
     $.ajax({
         url: '/api/homework',
         type: 'DELETE',
-        data: { id: id },
+        data: {id: id},
         success: function () {
             location.reload();
         },
@@ -88,19 +74,20 @@ function removeExtension(id) {
 }
 
 
-function getRegisteredExtensions() {
-    const fixed = $(".fixed-checkbox:checked").map(function () {
-        return $(this).val();
-    }).get();
-
-    const custom = $("#extensionsDisplay .extension-tag").map(function () {
-        return $(this).children('span').first().text().trim();
-    }).get();
-
-    return fixed.concat(custom);
+async function fetchRegisteredExtensions() {
+    try {
+        const res = await $.ajax({
+            url: '/api/homework/list',
+            method: 'GET'
+        });
+        return res; // [ 'exe', 'xlsx', 'txt' ]
+    } catch (err) {
+        console.error('확장자 목록 가져오기 실패:', err);
+        return [];
+    }
 }
 
-function autoCheckExtension(file) {
+async function autoCheckExtension(file) {
     const resultBox = $('#checkResult');
     resultBox.empty();
 
@@ -111,7 +98,7 @@ function autoCheckExtension(file) {
 
     const fileName = file.name;
     const ext = fileName.split('.').pop();
-    const registered = getRegisteredExtensions();
+    const registered = await fetchRegisteredExtensions();
 
     const isMatched = registered.includes(ext);
 

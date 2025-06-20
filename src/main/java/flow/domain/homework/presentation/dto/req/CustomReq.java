@@ -6,5 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record CustomReq(
         @Schema(description = "생성할 커스텀 이름", example = "pdf")
         String extension
+
 ) {
 }

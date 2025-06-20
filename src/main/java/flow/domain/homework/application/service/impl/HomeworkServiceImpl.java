@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,23 +40,47 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     public CustomRes createCustom(CustomReq customReq, User user) {
-        boolean flag = homeworkRepository.existsByUserAndExtension(user, customReq.extension());
-        CustomRes custom;
-        if (!flag) {
-            Homework homework = Homework.builder()
-                    .user(user)
-                    .extension(customReq.extension())
-                    .type(ExtensionType.CUSTOM)
-                    .selected(false)
-                    .build();
-
-            homeworkRepository.save(homework);
-
-            custom = CustomRes.of("성공");
-        } else {
-            custom = CustomRes.of("실패");
+        String rawExtension = customReq.extension();
+        if (rawExtension == null) {
+            return CustomRes.of("확장자가 비어있습니다.",false);
         }
-        return custom;
+
+        // 1. 빈 문자열 검사
+        if (rawExtension.isEmpty()) {
+            return CustomRes.of("확장자가 비어있습니다.",false);
+        }
+
+        // 2. 앞뒤/중간 공백 제거
+        String cleanedExt = rawExtension.trim().replaceAll("\\s+", "");
+
+        // 3. 정규식 검사: 영문 대소문자 + 숫자만 허용
+        if (!cleanedExt.matches("^[a-zA-Z0-9]+$")) {
+            log.info(cleanedExt);
+            return CustomRes.of("확장자는 영문자와 숫자만 입력할 수 있습니다.",false);
+        }
+
+        // 4. 등록 개수 제한 (최대 10개)
+        List<Homework> customExtensions = homeworkRepository.findCustomExtensionsByUser(user);
+        if (customExtensions.size() >= 10) {
+            return CustomRes.of("커스텀 확장자는 최대 10개까지 등록할 수 있습니다.",false);
+        }
+
+        // 5. 중복 검사
+        boolean alreadyExists = homeworkRepository.existsByUserAndExtension(user, cleanedExt);
+        if (alreadyExists) {
+            return CustomRes.of("이미 등록된 확장자입니다.",false);
+        }
+
+        // 저장
+        Homework homework = Homework.builder()
+                .user(user)
+                .extension(cleanedExt)
+                .type(ExtensionType.CUSTOM)
+                .selected(false)
+                .build();
+
+        homeworkRepository.save(homework);
+        return CustomRes.of("성공",true);
     }
 
     @Override
@@ -77,8 +102,22 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     public List<Homework> customList(User user) {
-
         return homeworkRepository.findCustomExtensionsByUser(user);
+    }
+
+    @Override
+    public List<String> getAllExtensionsForUser(User user) {
+        List<String> extension = new ArrayList<>();
+        List<Homework> fixedHomework = fixedList(user);
+        List<Homework> customHomework = customList(user);
+
+        for (Homework homework : customHomework) {
+            extension.add(homework.getExtension());
+        }
+        for (Homework homework : fixedHomework) {
+            extension.add(homework.getExtension());
+        }
+        return extension;
     }
 
 }

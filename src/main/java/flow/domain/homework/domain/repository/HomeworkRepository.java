@@ -21,4 +21,5 @@ public interface HomeworkRepository extends JpaRepository<Homework, Long> {
 
     // 중복 조회 검증 있으면 true 없으면 false
     boolean existsByUserAndExtension(User user, String extension);
+
 }
