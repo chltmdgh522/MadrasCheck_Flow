@@ -46,7 +46,7 @@
 
 > 데이터베이스 구조 및 테이블 간 관계
 
-![ERD](https://github.com/user-attachments/assets/7713cac1-ffb1-4566-92c9-b2623dfe2aa3)
+![ERD](https://github.com/user-attachments/assets/38ce9e4c-6ace-4d9a-8729-fdd944b003d4)
 
 ---
 
